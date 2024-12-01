@@ -5,5 +5,7 @@ fs.readFile('Day1.txt', 'utf8', function (err, data) {
   }
   let lines = data.split('\n');
 
-
+  lines.forEach(line => {
+    
+  });
 });
