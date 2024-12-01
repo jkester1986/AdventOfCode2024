@@ -19,6 +19,7 @@ fs.readFile('Day1.txt', 'utf8', function (err, data) {
     return a - b});
   rightList.sort((a, b) => {
     return a-b});
+  // map all values, track # of times each value is present
   rightList.map((val) => rightListSet[val] =  rightListSet[val] ? + rightListSet[val] + 1 : 1);
 
   let dist = 0;
