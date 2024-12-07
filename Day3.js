@@ -4,7 +4,6 @@ fs.readFile('Day3.txt', 'utf8', function (err, data) {
     return console.log(err);
   }
   let lines = data.split('\n');
-  console.log(lines.length);
 
   let sum = 0;
   let skipMul = false;
