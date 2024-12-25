@@ -21,7 +21,7 @@ fs.readFile('Day25.txt', 'utf8', function (err, data) {
       let counter = 0;
       let overlap = false;
       // see if there's overlap of "#"
-      while (counter < 35 && !overlap) {
+      while (counter < length && !overlap) {
         if (lock.charAt(counter) === "#" && key.charAt(counter) === "#") {
           overlap = true;
         }
