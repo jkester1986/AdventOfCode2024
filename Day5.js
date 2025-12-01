@@ -18,20 +18,18 @@ fs.readFile("Day5.txt", "utf8", function (err, data) {
 
   // prob could have done this more efficiently with orderedByKey, but not refactoring
   function isOrderedCorrectly(update) {
-    let tooHighIndex;
     let rulesMet = pageOrderSets.every((pageOrderSet) => {
       if (
         update.includes(pageOrderSet[0]) &&
         update.includes(pageOrderSet[1]) &&
         update.indexOf(pageOrderSet[0]) > update.indexOf(pageOrderSet[1])
       ) {
-        tooHighIndex = update.indexOf(pageOrderSet[0]);
         return false;
       }
       return true;
     });
 
-    return { rulesMet, tooHighIndex };
+    return rulesMet;
   }
 
   let updatesOutOfOrder = [];
@@ -41,12 +39,12 @@ fs.readFile("Day5.txt", "utf8", function (err, data) {
   // figure out what's valid, and the invalid ones push to  updatesOutOfOrder
   updates.forEach((update) => {
     let middle = update[Math.floor(update.length / 2)];
-    let { rulesMet, tooHighIndex } = isOrderedCorrectly(update);
+    let rulesMet = isOrderedCorrectly(update);
 
     if (rulesMet) {
       middleSum += middle;
     } else {
-      updatesOutOfOrder.push([update, tooHighIndex]);
+      updatesOutOfOrder.push(update);
     }
   });
 
@@ -56,7 +54,7 @@ fs.readFile("Day5.txt", "utf8", function (err, data) {
   let reorderedMiddleSum = 0;
 
   // Go through the ones that are out of order, and use a custom sort to reorder them correctly
-  updatesOutOfOrder.forEach(([update]) => {
+  updatesOutOfOrder.forEach((update) => {
     let reodered = update.sort((a, b) => {
       if (orderedByKey[a] && orderedByKey[a].includes(b)) {
         return -1;
