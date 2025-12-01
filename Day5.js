@@ -8,10 +8,15 @@ fs.readFile("Day5.txt", "utf8", function (err, data) {
     .split("\n")
     .map((line) => line.split("|").map(Number));
 
-  console.log(pageOrderSets);
+  const orderedByKey = {};
+  pageOrders.split("\n").forEach((line) => {
+    const [low, high] = line.split("|").map(Number);
+    orderedByKey[low] = [...(orderedByKey[low] || []), high];
+  });
 
   updates = updateLines.split("\n").map((line) => line.split(",").map(Number));
 
+  // prob could have done this more efficiently with orderedByKey, but not refactoring
   function isOrderedCorrectly(update) {
     let tooHighIndex;
     let rulesMet = pageOrderSets.every((pageOrderSet) => {
@@ -47,14 +52,19 @@ fs.readFile("Day5.txt", "utf8", function (err, data) {
 
   console.log("P1:", middleSum);
 
-  // console.log(updatesOutOfOrder);
+  // P2
+  let reorderedMiddleSum = 0;
 
-  // Go through the ones that are out of order, and attempt to order them.
-  // Shift the too high index to before all the numbers it should be before
-  // updatesOutOfOrder.forEach(update => [
-  //   let reodered = [...update]
-  //   while (!isOrderedCorrectly(reordered)) {
+  // Go through the ones that are out of order, and use a custom sort to reorder them correctly
+  updatesOutOfOrder.forEach(([update]) => {
+    let reodered = update.sort((a, b) => {
+      if (orderedByKey[a] && orderedByKey[a].includes(b)) {
+        return -1;
+      } else return 0;
+    });
 
-  //   }
-  // ])
+    reorderedMiddleSum += reodered[Math.floor(reodered.length / 2)];
+  });
+
+  console.log("P2:", reorderedMiddleSum);
 });
