@@ -17,10 +17,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
       down: true,
     };
 
-    // console.log(
-    //   `\nline ${0}, length + 4: ${length + 4}, length - 3: ${length - 3}`
-    // );
-
     // if row is on 3rd to last row or earlier, skip checking down
     if (i > length - 4) {
       checkRows.down = false;
@@ -31,15 +27,11 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
       checkRows.up = false;
     }
 
-    // console.log({ line: i + 1, checkRows });
-
     const reg = /X/g;
 
     // find all x in the line, and do something with it
     while ((match = reg.exec(line))) {
       const ind = match.index;
-
-      // console.log("index:", ind);
 
       // check top-left diagonal
       if (
@@ -50,7 +42,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         lines[i - 3][ind - 3] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found top-left diagonal`);
       }
 
       // check vertical
@@ -61,7 +52,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         lines[i - 3][ind] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found up vertical`);
       }
 
       // check top-right diagonal
@@ -73,7 +63,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         lines[i - 3][ind + 3] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found top-right diagonal`);
       }
 
       // check backward
@@ -84,7 +73,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         line[ind - 3] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found backward`);
       }
 
       // check forward
@@ -95,7 +83,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         line[ind + 3] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found forward`);
       }
 
       // check bottom-left diagonal
@@ -107,7 +94,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         lines[i + 3][ind - 3] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found bottom-left diagonal`);
       }
 
       // check directly down
@@ -118,7 +104,6 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         lines[i + 3][ind] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found down vertical`);
       }
 
       // check bottom-right diagonal
@@ -130,9 +115,59 @@ fs.readFile("Day4.txt", "utf8", function (err, data) {
         lines[i + 3][ind + 3] === "S"
       ) {
         p1Count++;
-        // console.log(`line ${i + 1}, found bottom-right diagonal`);
       }
     }
   });
   console.log("P1 count:", p1Count);
+
+  let p2Count = 0;
+  // Part 2
+  // y axis, incrementing
+  lines.map((line, i) => {
+    let checkRows = {
+      up: true,
+      down: true,
+    };
+
+    // console.log(
+    //   `\nline ${0}, length + 4: ${length + 4}, length - 3: ${length - 3}`
+    // );
+
+    // if row is on the last row, skip checking down
+    if (i === length - 1) {
+      checkRows.down = false;
+    }
+
+    // if row is on the first row
+    if (i === 0) {
+      checkRows.up = false;
+    }
+
+    // console.log({ line: i + 1, checkRows });
+
+    const reg = /A/g;
+
+    // find all x in the line, and do something with it
+    while ((match = reg.exec(line))) {
+      const ind = match.index;
+
+      // console.log("index:", ind);
+
+      if (
+        ind > 0 &&
+        i > 0 &&
+        i < line.length - 1 &&
+        checkRows.up &&
+        // top-left to bottom-right
+        ((lines[i - 1][ind - 1] === "M" && lines[i + 1][ind + 1] === "S") ||
+          (lines[i - 1][ind - 1] === "S" && lines[i + 1][ind + 1] === "M")) &&
+        // top-right to bottom-left
+        ((lines[i - 1][ind + 1] === "M" && lines[i + 1][ind - 1] === "S") ||
+          (lines[i - 1][ind + 1] === "S" && lines[i + 1][ind - 1] === "M"))
+      ) {
+        p2Count++;
+      }
+    }
+  });
+  console.log("P2 count:", p2Count);
 });
